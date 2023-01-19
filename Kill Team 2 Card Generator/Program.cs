@@ -2,23 +2,21 @@
 
 using KT2CG;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 KillTeamRepo repo = new KillTeamRepo();
 ScraperOptions options = new ScraperOptions();
-options.KillTeams.Add(repo.Get("Blooded"));
+//options.KillTeams.Add(repo.Get("Farstalker Kinband"));
+options.KillTeams = repo.GetAll();
 var scraper = new Scraper(options);
 var equipmentList = scraper.GetEquipment();
 
-Console.WriteLine();
-Console.WriteLine("Hey buddy! You crawled whapedia for equipment! Good job you!");
-Console.WriteLine("Here are the " + equipmentList.Count + " pieces of equipment I found for Blooded");
-Console.WriteLine();
-Console.WriteLine();
-
 foreach (var killTeam in options.KillTeams)
 {
-	Console.Write("Equipment for " + killTeam.Name);
-	Console.WriteLine();
+	Console.WriteLine("--------------------------------------------------------------");
+	Console.WriteLine("------------EQUIPMENT FOR " + killTeam.Name + "---------------");
+	Console.WriteLine("--------------------------------------------------------------");
+
+ Console.WriteLine();
 	foreach (var equipment in equipmentList[killTeam.Name])
 	{
 		Console.WriteLine("Equipment:");
@@ -30,4 +28,5 @@ foreach (var killTeam in options.KillTeams)
 
 }
 
+Console.WriteLine("That was fun. Press any key to exit");
 Console.ReadKey();

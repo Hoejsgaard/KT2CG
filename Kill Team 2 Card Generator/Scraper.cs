@@ -15,10 +15,10 @@ public class Scraper
 
 	public Dictionary<string, List<Equipment>> GetEquipment()
 	{
-		
-		Dictionary<string, List<Equipment>> killTeamsEquipment = new Dictionary<string, List<Equipment>>();
+		var killTeamsEquipment = new Dictionary<string, List<Equipment>>();
 		foreach (var killTeam in _options.KillTeams)
 		{
+			Console.WriteLine("Working on scraping " + killTeam.Name);
 			var equipmentList = new List<Equipment>();
 			HtmlDocument _doc;
 			var page = killTeam.Url;
@@ -57,6 +57,7 @@ public class Scraper
 
 				equipmentList.Add(equipment);
 			}
+
 			killTeamsEquipment.Add(killTeam.Name, equipmentList);
 		}
 
@@ -71,33 +72,76 @@ public class Scraper
 		var tbody = table.SelectNodes(".//tbody");
 		if (tbody.Count == 2)
 		{
-			sb.AppendLine(tbody[1].SelectSingleNode(".//tr[1]//td[2]").InnerText);
+			var name = tbody[1].SelectSingleNode(".//tr[1]//td[2]").InnerText;
+			sb.AppendLine(name);
 			sb.AppendLine("Type  : " + (tbody[1].SelectSingleNode(".//tr[1]//td[1]").HasClass("wsDataRanged")
 				? "Ranged"
 				: "Melee"));
 			sb.AppendLine("A     : " + tbody[1].SelectSingleNode(".//tr[1]//td[3]").InnerText);
 			sb.AppendLine("BS/WS : " + tbody[1].SelectSingleNode(".//tr[1]//td[4]").InnerText);
 			sb.AppendLine("D     : " + tbody[1].SelectSingleNode(".//tr[1]//td[5]").InnerText);
-			sb.AppendLine("!     : " + tbody[1].SelectSingleNode(".//tr[3]//td[2]").InnerText);
-			var specialRules = tbody[1].SelectSingleNode(".//tr[3]//td[1]").SelectNodes("./div/span");
+			sb.Append("!     : ");
+			var critRules = tbody[1].SelectSingleNode(".//tr[3]//td[2]")?.SelectNodes("./div/span");
+			if (critRules == null)
+			{
+				sb.Append("-");
+			}
+			else
+			{
+				foreach (var critRule in critRules)
+				{
+					var details = critRule.SelectNodes("./span");
+					sb.Append(details[0].InnerText);
+					sb.Append(", ");
+				}
+
+				sb.Remove(sb.Length - 2, 2);
+			}
+
+			sb.AppendLine();
+
+			var specialRules = tbody[1].SelectSingleNode(".//tr[3]//td[1]")?.SelectNodes("./div/span");
 			if (specialRules != null)
 			{
 				sb.Append("Special: ");
 				foreach (var specialRule in specialRules)
 				{
 					var details = specialRule.SelectNodes("./span");
-					sb.Append(details[0].InnerText);
-					if (details.Count > 1)
+					if (details == null) //e.g., farstalker kinband, Kroot pistol
 					{
-						var span = details[1].SelectSingleNode("./span");
-						if (span.HasClass("f1"))
+						sb.Append(specialRule.ParentNode.InnerText);
+						if (specialRule.HasClass("f1"))
 							sb.Append("△");
-						if (span.HasClass("f2"))
+						if (specialRule.HasClass("f2"))
 							sb.Append("◯");
-						if (span.HasClass("f3"))
+						if (specialRule.HasClass("f3"))
 							sb.Append("□");
-						if (span.HasClass("f6"))
+						if (specialRule.HasClass("f6"))
 							sb.Append("⬠");
+						else
+							sb.Append(specialRule.InnerText);
+					}
+					else
+					{
+						sb.Append(details[0].InnerText);
+
+						if (details.Count > 1)
+						{
+							var span = details[1].SelectSingleNode("./span");
+							if (span != null)
+							{
+								if (span.HasClass("f1"))
+									sb.Append("△");
+								if (span.HasClass("f2"))
+									sb.Append("◯");
+								if (span.HasClass("f3"))
+									sb.Append("□");
+								if (span.HasClass("f6"))
+									sb.Append("⬠");
+								else
+									sb.Append(span.InnerText);
+							}
+						}
 					}
 
 					sb.Append(", ");
