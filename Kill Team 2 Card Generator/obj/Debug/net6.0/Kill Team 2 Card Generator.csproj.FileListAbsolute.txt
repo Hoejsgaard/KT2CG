@@ -1,0 +1,17 @@
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\Kill Team 2 Card Generator.exe
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\Kill Team 2 Card Generator.deps.json
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\Kill Team 2 Card Generator.runtimeconfig.json
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\Kill Team 2 Card Generator.dll
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\Kill Team 2 Card Generator.pdb
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\bin\Debug\net6.0\HtmlAgilityPack.dll
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.csproj.AssemblyReference.cache
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.GeneratedMSBuildEditorConfig.editorconfig
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.AssemblyInfoInputs.cache
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.AssemblyInfo.cs
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.csproj.CoreCompileInputs.cache
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.csproj.CopyComplete
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.dll
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\refint\Kill Team 2 Card Generator.dll
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.pdb
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\Kill Team 2 Card Generator.genruntimeconfig.cache
+E:\git\KillTeamCardGenerator\KT2CG\Kill Team 2 Card Generator\obj\Debug\net6.0\ref\Kill Team 2 Card Generator.dll
