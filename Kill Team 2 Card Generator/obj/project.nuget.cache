@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "R/WupOitW/rLMbMnkxipsikWoIfshYBbPW1B/AFuZi84B5gI6sTZmLYm3vBAPWw9tOdurf8dzqipZWT6fUTWzA==",
+  "dgSpecHash": "V0luJSJ8HzYiZs9Lzz2pzVB9Bk704uPRj7E2RcBVYrqfAn+7DZgsEtEM2IKZ3oBZM/5Ua3MGzrkU7+4jT2nKhg==",
   "success": true,
-  "projectFilePath": "E:\\git\\KillTeamCardGenerator\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
+  "projectFilePath": "E:\\git\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Rune Højsgaard\\.nuget\\packages\\htmlagilitypack\\1.11.46\\htmlagilitypack.1.11.46.nupkg.sha512"
   ],

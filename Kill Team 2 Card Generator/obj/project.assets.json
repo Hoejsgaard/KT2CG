@@ -79,11 +79,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\git\\KillTeamCardGenerator\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
+      "projectUniqueName": "E:\\git\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
       "projectName": "Kill Team 2 Card Generator",
-      "projectPath": "E:\\git\\KillTeamCardGenerator\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
+      "projectPath": "E:\\git\\KT2CG\\Kill Team 2 Card Generator\\Kill Team 2 Card Generator.csproj",
       "packagesPath": "C:\\Users\\Rune Højsgaard\\.nuget\\packages\\",
-      "outputPath": "E:\\git\\KillTeamCardGenerator\\KT2CG\\Kill Team 2 Card Generator\\obj\\",
+      "outputPath": "E:\\git\\KT2CG\\Kill Team 2 Card Generator\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
