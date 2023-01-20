@@ -51,7 +51,10 @@ public class Scraper
 				var tables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
 				if (tables != null)
 					foreach (var table in tables)
+					{
+						ExtractWeapons(table, equipment);
 						ReplaceTableWithText(table);
+					}
 
 				equipment.Description = equipmentDiv.InnerText.Trim();
 
@@ -64,10 +67,8 @@ public class Scraper
 		return killTeamsEquipment;
 	}
 
-	public void ExtractWeapons(HtmlNode table, Equipment equipemnt)
+	public void ExtractWeapons(HtmlNode table, Equipment equipment)
 	{
-		
-		
 		var tbody = table.SelectNodes(".//tbody");
 		if (tbody.Count == 2)
 		{
@@ -139,6 +140,7 @@ public class Scraper
 					}
 				}
 			}
+			equipment.Weapons.Add(weapon);
 		}
 	}
 

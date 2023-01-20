@@ -6,5 +6,5 @@ public class Equipment
 	public string Cost { get; set; }
 	public string Description { get; set; }
 
-	public List<Weapon> weapons { get; set; }
+	public List<Weapon> Weapons { get; set; } = new List<Weapon>();
 }
