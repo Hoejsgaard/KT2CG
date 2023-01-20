@@ -43,18 +43,27 @@ public class Scraper
 				equipmentDiv.RemoveChild(nameNode);
 
 
-				var brs = equipmentDiv.SelectNodes(".//br");
-				if (brs != null)
-					foreach (var child in brs)
+				var htmlBreaks = equipmentDiv.SelectNodes(".//br");
+				if (htmlBreaks != null)
+					foreach (var child in htmlBreaks)
 						child.ParentNode.ReplaceChild(HtmlNode.CreateNode(Environment.NewLine), child);
 
-				var tables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
-				if (tables != null)
-					foreach (var table in tables)
+				var assumedEquipmentTables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
+				if (assumedEquipmentTables != null)
+					foreach (var table in assumedEquipmentTables)
 					{
 						ExtractWeapons(table, equipment);
-						ReplaceTableWithText(table);
+						ReplaceTableWithText(table); // Remove - coverd by equipment.Weapons
 					}
+
+				var assumedAbilities = equipmentDiv.SelectNodes(".//div/div[@class='Corner24_in']");
+				if (assumedAbilities != null)
+					foreach (var ability in assumedAbilities)
+					{
+						ExtractAbility(ability, equipment);
+					   // Remove the extracted text
+					   ability.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), ability);
+				  	}
 
 				equipment.Description = equipmentDiv.InnerText.Trim();
 
@@ -65,6 +74,20 @@ public class Scraper
 		}
 
 		return killTeamsEquipment;
+	}
+
+	private void ExtractAbility(HtmlNode ability, Equipment equipment)
+	{
+		var headerNode = ability.SelectSingleNode(".//h3");
+		var apNode = headerNode.SelectSingleNode(".//span");
+		var description = ability.SelectSingleNode(".//div").InnerText;
+
+		equipment.Abilities.Add(new Ability
+		{
+			AP = apNode.InnerText,
+			Description = description,
+			Name = headerNode.InnerText
+		});
 	}
 
 	public void ExtractWeapons(HtmlNode table, Equipment equipment)
