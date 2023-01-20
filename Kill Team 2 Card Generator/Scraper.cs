@@ -61,10 +61,11 @@ public class Scraper
 					foreach (var ability in assumedAbilities)
 					{
 						ExtractAbility(ability, equipment);
-					   // Remove the extracted text
-					   ability.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), ability);
-				  	}
+						// Remove the extracted text
+						ability.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), ability);
+					}
 
+				ReplaceDistanceShapes(equipmentDiv);
 				equipment.Description = equipmentDiv.InnerText.Trim();
 
 				equipmentList.Add(equipment);
@@ -80,7 +81,10 @@ public class Scraper
 	{
 		var headerNode = ability.SelectSingleNode(".//h3");
 		var apNode = headerNode.SelectSingleNode(".//span");
-		var description = ability.SelectSingleNode(".//div").InnerText;
+		var descriptionNode = ability.SelectSingleNode(".//div");
+		ReplaceDistanceShapes(descriptionNode);
+		var description = descriptionNode.InnerText.Trim();
+
 
 		equipment.Abilities.Add(new Ability
 		{
@@ -90,12 +94,32 @@ public class Scraper
 		});
 	}
 
+	public void ReplaceDistanceShapes(HtmlNode node)
+	{
+		var circles = node.SelectNodes(".//span[@class='f1']");
+		var triangles = node.SelectNodes(".//span[@class='f2']");
+		var squares = node.SelectNodes(".//span[@class='f3']");
+		var pentagons = node.SelectNodes(".//span[@class='f6']");
+		ReplaceDistanceShape(triangles, "△");
+		ReplaceDistanceShape(circles, "◯");
+		ReplaceDistanceShape(squares, "□");
+		ReplaceDistanceShape(pentagons, "⬠");
+	}
+
+	private void ReplaceDistanceShape(HtmlNodeCollection? nodes, string replacement)
+	{
+		if (nodes == null)
+			return;
+		foreach (var node in nodes) node.ParentNode.ReplaceChild(HtmlNode.CreateNode(replacement), node);
+	}
+
+
 	public void ExtractWeapons(HtmlNode table, Equipment equipment)
 	{
 		var tbody = table.SelectNodes(".//tbody");
 		if (tbody.Count == 2)
 		{
-			Weapon weapon = new Weapon();
+			var weapon = new Weapon();
 
 			var name = tbody[1].SelectSingleNode(".//tr[1]//td[2]").InnerText;
 			weapon.Name = name;
@@ -107,23 +131,20 @@ public class Scraper
 			var critRules = tbody[1].SelectSingleNode(".//tr[3]//td[2]")?.SelectNodes("./div/span");
 			if (critRules != null)
 
-			{
 				foreach (var critRule in critRules)
 				{
 					var details = critRule.SelectNodes("./span");
 					weapon.OnCrit.Add(details[0].InnerText);
 				}
-			}
 
 			var specialRules = tbody[1].SelectSingleNode(".//tr[3]//td[1]")?.SelectNodes("./div/span");
 			if (specialRules != null)
-			{
 				foreach (var specialRule in specialRules)
 				{
 					var details = specialRule.SelectNodes("./span");
 					if (details == null) //e.g., farstalker kinband, Kroot pistol
 					{
-						string rule = specialRule.ParentNode.InnerText;
+						var rule = specialRule.ParentNode.InnerText;
 
 						if (specialRule.HasClass("f1"))
 							rule += "△";
@@ -163,7 +184,7 @@ public class Scraper
 						weapon.SpecailRules.Add(rule);
 					}
 				}
-			}
+
 			equipment.Weapons.Add(weapon);
 		}
 	}
