@@ -6,8 +6,8 @@ using KT2CG;
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 KillTeamRepo repo = new KillTeamRepo();
 ScraperOptions options = new ScraperOptions();
-//options.KillTeams.Add(repo.Get("Farstalker Kinband"));
-options.KillTeams = repo.GetAll();
+options.KillTeams.Add(repo.Get("Novitiate"));
+//options.KillTeams = repo.GetAll();
 var scraper = new Scraper(options);
 var equipmentList = scraper.GetEquipment();
 

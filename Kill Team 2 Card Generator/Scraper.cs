@@ -124,18 +124,19 @@ public class Scraper
 							var span = details[1].SelectSingleNode("./span");
 							if (span != null)
 							{
-								if (specialRule.HasClass("f1"))
+								if (span.HasClass("f1"))
 									rule += "△";
-								if (specialRule.HasClass("f2"))
+								if (span.HasClass("f2"))
 									rule += "◯";
-								if (specialRule.HasClass("f3"))
+								if (span.HasClass("f3"))
 									rule += "□";
-								if (specialRule.HasClass("f6"))
+								if (span.HasClass("f6"))
 									rule += "⬠";
 								else
 									rule += span.InnerText;
 							}
 						}
+
 						weapon.SpecailRules.Add(rule);
 					}
 				}
