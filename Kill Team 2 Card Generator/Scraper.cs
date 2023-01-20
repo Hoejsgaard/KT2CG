@@ -80,8 +80,10 @@ public class Scraper
 	private void ExtractAbility(HtmlNode ability, Equipment equipment)
 	{
 		var headerNode = ability.SelectSingleNode(".//h3");
-		var apNode = headerNode.SelectSingleNode(".//span");
 		var descriptionNode = ability.SelectSingleNode(".//div");
+		var apNode = headerNode.SelectSingleNode(".//span");
+		apNode.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), apNode);
+		
 		ReplaceDistanceShapes(descriptionNode);
 		var description = descriptionNode.InnerText.Trim();
 
