@@ -64,6 +64,83 @@ public class Scraper
 		return killTeamsEquipment;
 	}
 
+	public void ExtractWeapons(HtmlNode table, Equipment equipemnt)
+	{
+		
+		
+		var tbody = table.SelectNodes(".//tbody");
+		if (tbody.Count == 2)
+		{
+			Weapon weapon = new Weapon();
+
+			var name = tbody[1].SelectSingleNode(".//tr[1]//td[2]").InnerText;
+			weapon.Name = name;
+			weapon.IsRanged = tbody[1].SelectSingleNode(".//tr[1]//td[1]").HasClass("wsDataRanged");
+			weapon.Attacks = tbody[1].SelectSingleNode(".//tr[1]//td[3]").InnerText;
+			weapon.Skill = tbody[1].SelectSingleNode(".//tr[1]//td[4]").InnerText;
+			weapon.Damage = tbody[1].SelectSingleNode(".//tr[1]//td[5]").InnerText;
+
+			var critRules = tbody[1].SelectSingleNode(".//tr[3]//td[2]")?.SelectNodes("./div/span");
+			if (critRules != null)
+
+			{
+				foreach (var critRule in critRules)
+				{
+					var details = critRule.SelectNodes("./span");
+					weapon.OnCrit.Add(details[0].InnerText);
+				}
+			}
+
+			var specialRules = tbody[1].SelectSingleNode(".//tr[3]//td[1]")?.SelectNodes("./div/span");
+			if (specialRules != null)
+			{
+				foreach (var specialRule in specialRules)
+				{
+					var details = specialRule.SelectNodes("./span");
+					if (details == null) //e.g., farstalker kinband, Kroot pistol
+					{
+						string rule = specialRule.ParentNode.InnerText;
+
+						if (specialRule.HasClass("f1"))
+							rule += "△";
+						if (specialRule.HasClass("f2"))
+							rule += "◯";
+						if (specialRule.HasClass("f3"))
+							rule += "□";
+						if (specialRule.HasClass("f6"))
+							rule += "⬠";
+						else
+							rule += specialRule.InnerText;
+
+						weapon.SpecailRules.Add(rule);
+					}
+					else
+					{
+						var rule = details[0].InnerText;
+
+						if (details.Count > 1)
+						{
+							var span = details[1].SelectSingleNode("./span");
+							if (span != null)
+							{
+								if (specialRule.HasClass("f1"))
+									rule += "△";
+								if (specialRule.HasClass("f2"))
+									rule += "◯";
+								if (specialRule.HasClass("f3"))
+									rule += "□";
+								if (specialRule.HasClass("f6"))
+									rule += "⬠";
+								else
+									rule += span.InnerText;
+							}
+						}
+						weapon.SpecailRules.Add(rule);
+					}
+				}
+			}
+		}
+	}
 
 	public void ReplaceTableWithText(HtmlNode table)
 	{

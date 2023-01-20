@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text.Json;
 using KT2CG;
 
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
@@ -9,6 +10,12 @@ ScraperOptions options = new ScraperOptions();
 options.KillTeams = repo.GetAll();
 var scraper = new Scraper(options);
 var equipmentList = scraper.GetEquipment();
+
+string json = JsonSerializer.Serialize(equipmentList);
+using (StreamWriter writer = new StreamWriter("c:\\tmp\\eqipment.json"))
+{
+	writer.Write(json);
+}
 
 foreach (var killTeam in options.KillTeams)
 {
