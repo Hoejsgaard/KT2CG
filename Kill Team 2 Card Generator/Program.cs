@@ -28,8 +28,8 @@ using KT2CG;
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 KillTeamRepo repo = new KillTeamRepo();
 ScraperOptions options = new ScraperOptions();
-options.KillTeams.Add(repo.Get("Talons of the Emperor"));
-//options.KillTeams = repo.GetAll();
+//options.KillTeams.Add(repo.Get("Kasrkin"));
+options.KillTeams = repo.GetAll();
 var scraper = new Scraper(options);
 var equipmentList = scraper.GetEquipment();
 
@@ -41,20 +41,8 @@ using (StreamWriter writer = new StreamWriter("c:\\tmp\\eqipment.json"))
 
 foreach (var killTeam in options.KillTeams)
 {
-	Console.WriteLine("--------------------------------------------------------------");
-	Console.WriteLine("------------EQUIPMENT FOR " + killTeam.Name + "---------------");
-	Console.WriteLine("--------------------------------------------------------------");
-
- Console.WriteLine();
-	foreach (var equipment in equipmentList[killTeam.Name])
-	{
-		Console.WriteLine("Equipment:");
-		Console.WriteLine("Name: " + equipment.Name);
-		Console.WriteLine("Cost: " + equipment.Cost);
-		Console.WriteLine("Description: " + Environment.NewLine + equipment.Description);
-		Console.WriteLine();
-	}
-
+	Console.WriteLine("Fetched {0} pieces of equipment from {1}", equipmentList[killTeam.Name].Count, killTeam.Name);
+	Console.WriteLine();
 }
 
 Console.WriteLine("That was fun. Press any key to exit");

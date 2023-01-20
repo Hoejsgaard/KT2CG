@@ -19,6 +19,7 @@ public class Scraper
 		foreach (var killTeam in _options.KillTeams)
 		{
 			Console.WriteLine("Working on scraping " + killTeam.Name);
+			Console.WriteLine();
 			var equipmentList = new List<Equipment>();
 			HtmlDocument _doc;
 			var page = killTeam.Url;
@@ -51,10 +52,7 @@ public class Scraper
 				var assumedEquipmentTables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
 				if (assumedEquipmentTables != null)
 					foreach (var table in assumedEquipmentTables)
-					{
 						ExtractWeapons(table, equipment);
-						ReplaceTableWithText(table); // Remove - coverd by equipment.Weapons
-					}
 
 				var assumedAbilities = equipmentDiv.SelectNodes(".//div/div[@class='Corner24_in']");
 				if (assumedAbilities != null)
@@ -83,7 +81,7 @@ public class Scraper
 		var descriptionNode = ability.SelectSingleNode(".//div");
 		var apNode = headerNode.SelectSingleNode(".//span");
 		apNode.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), apNode);
-		
+
 		ReplaceDistanceShapes(descriptionNode);
 		var description = descriptionNode.InnerText.Trim();
 
@@ -189,6 +187,8 @@ public class Scraper
 
 			equipment.Weapons.Add(weapon);
 		}
+
+		table.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), table);
 	}
 
 	public void ReplaceTableWithText(HtmlNode table)
