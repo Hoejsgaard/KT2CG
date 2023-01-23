@@ -27,22 +27,22 @@ using KT2CG;
 
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 KillTeamRepo repo = new KillTeamRepo();
-ScraperOptions options = new ScraperOptions();
-//options.KillTeams.Add(repo.Get("Kasrkin"));
-options.KillTeams = repo.GetAll();
-var scraper = new Scraper(options);
-var equipmentList = scraper.GetEquipment();
+List<KillTeam> teams = repo.GetAll();
+//List<KillTeam> teams = repo.Get("Warpcoven");
+var scraper = new Scraper(teams);
+scraper.Scrape();
 
-string json = JsonSerializer.Serialize(equipmentList);
+string json = JsonSerializer.Serialize(teams);
 using (StreamWriter writer = new StreamWriter("c:\\tmp\\eqipment.json"))
 {
 	writer.Write(json);
 }
 
-foreach (var killTeam in options.KillTeams)
+foreach (var killTeam in teams)
 {
-	Console.WriteLine("Fetched {0} pieces of equipment from {1}", equipmentList[killTeam.Name].Count, killTeam.Name);
-	Console.WriteLine();
+	Console.WriteLine("Fetched {0} pieces of equipment from {1}", killTeam.Equipment.Count, killTeam.Name);
+	Console.WriteLine("Fetched {0} Tac Ops from {1}", killTeam.TacOps.Count, killTeam.Name);
+ Console.WriteLine();
 }
 
 Console.WriteLine("That was fun. Press any key to exit");

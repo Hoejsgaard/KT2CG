@@ -5,93 +5,152 @@ namespace KT2CG;
 
 public class Scraper
 {
-	private readonly ScraperOptions _options;
+	private readonly List<KillTeam> _teams;
 
-	public Scraper(ScraperOptions options)
+	public Scraper(List<KillTeam> killTeams)
 	{
-		_options = options;
+		_teams = killTeams;
 	}
 
-
-	public Dictionary<string, List<Equipment>> GetEquipment()
+	public List<KillTeam> Scrape()
 	{
-		var killTeamsEquipment = new Dictionary<string, List<Equipment>>();
-		foreach (var killTeam in _options.KillTeams)
+		foreach (var killTeam in _teams)
 		{
 			Console.WriteLine("Working on scraping " + killTeam.Name);
 			Console.WriteLine();
-			var equipmentList = new List<Equipment>();
-			HtmlDocument _doc;
-			var page = killTeam.Url;
-			var web = new HtmlWeb();
-			_doc = web.Load(page);
-			var equipmentDivs = _doc.DocumentNode.SelectNodes(
-				"//h2[text()='Equipment']/following-sibling::div[@class='Columns2']/div[@class='BreakInsideAvoid ']");
-
-
-			foreach (var equipmentDiv in equipmentDivs)
-			{
-				var equipment = new Equipment();
-
-				var nameNode = equipmentDiv.SelectSingleNode(".//p[@class='h_relic']");
-				equipment.Name = nameNode.InnerText.Trim();
-
-				var costStart = equipment.Name.IndexOf("[") + 1;
-				var costEnd = equipment.Name.IndexOf("]");
-				equipment.Cost = equipment.Name.Substring(costStart, costEnd - costStart);
-				equipment.Name = equipment.Name.Substring(0, costStart - 1).Trim();
-
-				equipmentDiv.RemoveChild(nameNode);
-
-
-				var htmlBreaks = equipmentDiv.SelectNodes(".//br");
-				if (htmlBreaks != null)
-					foreach (var child in htmlBreaks)
-						child.ParentNode.ReplaceChild(HtmlNode.CreateNode(Environment.NewLine), child);
-
-				var assumedEquipmentTables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
-				if (assumedEquipmentTables != null)
-					foreach (var table in assumedEquipmentTables)
-						ExtractWeapons(table, equipment);
-
-				var assumedAbilities = equipmentDiv.SelectNodes(".//div/div[@class='Corner24_in']");
-				if (assumedAbilities != null)
-					foreach (var ability in assumedAbilities)
-					{
-						ExtractAbility(ability, equipment);
-						// Remove the extracted text
-						ability.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), ability);
-					}
-
-				ReplaceDistanceShapes(equipmentDiv);
-				equipment.Description = equipmentDiv.InnerText.Trim();
-
-				equipmentList.Add(equipment);
-			}
-
-			killTeamsEquipment.Add(killTeam.Name, equipmentList);
+			Extract(killTeam);
 		}
 
-		return killTeamsEquipment;
+		return _teams;
 	}
 
-	private void ExtractAbility(HtmlNode ability, Equipment equipment)
+	private void Extract(KillTeam team)
+	{
+		var page = team.Url;
+		var web = new HtmlWeb();
+		var doc = web.Load(page);
+		ExtractEquipment(team, doc);
+		ExtractTacOps(team, doc);
+	}
+
+
+	private void ExtractTacOps(KillTeam killTeam, HtmlDocument doc)
+	{
+		var tacOpsNodes = doc.DocumentNode.SelectNodes(
+			"//h2[text()='Tac Ops']/following-sibling::div[@class='BreakInsideAvoid']/div[@class='Columns2']/div[@class=' stratWrapper BreakInsideAvoid']");
+		if (tacOpsNodes == null)
+			tacOpsNodes = doc.DocumentNode.SelectNodes(
+				"//h2[text()='Tac Ops']/following-sibling::div[@class='Columns2']/div[@class=' stratWrapper BreakInsideAvoid']");
+
+		if (tacOpsNodes == null) return;
+
+
+		foreach (var tacOpsNode in tacOpsNodes)
+		{
+			var tacOps = new TacOps();
+			var elements = tacOpsNode.SelectNodes(".//div");
+
+			tacOps.Name = elements[0].InnerText;
+			tacOps.Number = elements[1].InnerText;
+			var descriptionNode = elements[2];
+			var conditionsNode = descriptionNode.SelectSingleNode(".//ul");
+			var conditions = descriptionNode.SelectNodes(".//ul/li");
+			var firstCondition = conditions[0];
+			ReplaceDistanceShapes(firstCondition);
+			tacOps.Conditions[0] = firstCondition.InnerText;
+			if (conditions.Count > 1)
+			{
+				var secondCondition = conditions[1];
+
+				tacOps.Conditions[1] = secondCondition.InnerText;
+				ReplaceDistanceShapes(secondCondition);
+			}
+
+			RemoveNode(conditionsNode);
+			tacOps.Description = descriptionNode.InnerText;
+
+			var assumedAbilities = elements[2].SelectNodes(".//div/div[@class='Corner24_in']");
+			if (assumedAbilities != null)
+				foreach (var ability in assumedAbilities)
+				{
+					tacOps.Abilities.Add(ExtractAbility(ability));
+					// Remove the extracted text
+					RemoveNode(ability);
+				}
+
+			killTeam.TacOps.Add(tacOps);
+		}
+	}
+
+	private void ExtractEquipment(KillTeam killTeam, HtmlDocument doc)
+	{
+		var equipmentDivs = doc.DocumentNode.SelectNodes(
+			"//h2[text()='Equipment']/following-sibling::div[@class='Columns2']/div[@class='BreakInsideAvoid ']");
+
+
+		foreach (var equipmentDiv in equipmentDivs)
+		{
+			var equipment = new Equipment();
+
+			var nameNode = equipmentDiv.SelectSingleNode(".//p[@class='h_relic']");
+			equipment.Name = nameNode.InnerText.Trim();
+
+			var costStart = equipment.Name.IndexOf("[") + 1;
+			var costEnd = equipment.Name.IndexOf("]");
+			equipment.Cost = equipment.Name.Substring(costStart, costEnd - costStart);
+			equipment.Name = equipment.Name.Substring(0, costStart - 1).Trim();
+
+			equipmentDiv.RemoveChild(nameNode);
+
+
+			var htmlBreaks = equipmentDiv.SelectNodes(".//br");
+			if (htmlBreaks != null)
+				foreach (var child in htmlBreaks)
+					child.ParentNode.ReplaceChild(HtmlNode.CreateNode(Environment.NewLine), child);
+
+			var assumedEquipmentTables = equipmentDiv.SelectNodes(".//div//table[@class='wTable']");
+			if (assumedEquipmentTables != null)
+				foreach (var table in assumedEquipmentTables)
+					ExtractWeapons(table, equipment);
+
+			var assumedAbilities = equipmentDiv.SelectNodes(".//div/div[@class='Corner24_in']");
+			if (assumedAbilities != null)
+				foreach (var ability in assumedAbilities)
+				{
+					equipment.Abilities.Add(ExtractAbility(ability));
+					// Remove the extracted text
+					RemoveNode(ability);
+				}
+
+			ReplaceDistanceShapes(equipmentDiv);
+			equipment.Description = equipmentDiv.InnerText.Trim();
+
+			killTeam.Equipment.Add(equipment);
+		}
+	}
+
+	private Ability ExtractAbility(HtmlNode ability)
 	{
 		var headerNode = ability.SelectSingleNode(".//h3");
 		var descriptionNode = ability.SelectSingleNode(".//div");
 		var apNode = headerNode.SelectSingleNode(".//span");
-		apNode.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), apNode);
+		RemoveNode(apNode);
 
 		ReplaceDistanceShapes(descriptionNode);
 		var description = descriptionNode.InnerText.Trim();
 
 
-		equipment.Abilities.Add(new Ability
+		return new Ability
 		{
 			AP = apNode.InnerText,
 			Description = description,
 			Name = headerNode.InnerText
-		});
+		};
+	}
+
+	public void RemoveNode(HtmlNode node)
+	{
+		node.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), node);
 	}
 
 	public void ReplaceDistanceShapes(HtmlNode node)
@@ -105,6 +164,7 @@ public class Scraper
 		ReplaceDistanceShape(squares, "□");
 		ReplaceDistanceShape(pentagons, "⬠");
 	}
+
 
 	private void ReplaceDistanceShape(HtmlNodeCollection? nodes, string replacement)
 	{
@@ -188,7 +248,7 @@ public class Scraper
 			equipment.Weapons.Add(weapon);
 		}
 
-		table.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), table);
+		RemoveNode(table);
 	}
 
 	public void ReplaceTableWithText(HtmlNode table)

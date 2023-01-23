@@ -33,8 +33,11 @@ public class KillTeamRepo
 		return _teams;
 	}
 
-	public KillTeam? Get(string name)
+	public List<KillTeam> Get(string name)
 	{
-		return _teams.Find(t => t.Name == name);
+		return new List<KillTeam>()
+		{
+			_teams.Find(t => t.Name == name)
+		};
 	}
 }
