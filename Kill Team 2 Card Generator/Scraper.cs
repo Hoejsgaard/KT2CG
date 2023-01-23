@@ -37,8 +37,7 @@ public class Scraper
 
 	private void ExtractPloys(KillTeam killTeam, HtmlDocument doc, string header, List<Ploy> ploys)
 	{
-
-		var cantBeBothered= doc.DocumentNode.SelectNodes(
+		var cantBeBothered = doc.DocumentNode.SelectNodes(
 			$"//h2[text()='{header}']/following-sibling::div[@class='BreakInsideAvoid']");
 		var ployNodes = cantBeBothered[0]
 			.SelectNodes(".//div[@class='Columns2']/div[@class=' stratWrapper BreakInsideAvoid']");
@@ -172,12 +171,12 @@ public class Scraper
 		};
 	}
 
-	public void RemoveNode(HtmlNode node)
+	private void RemoveNode(HtmlNode node)
 	{
 		node.ParentNode.ReplaceChild(HtmlNode.CreateNode(""), node);
 	}
 
-	public void ReplaceDistanceShapes(HtmlNode node)
+	private void ReplaceDistanceShapes(HtmlNode node)
 	{
 		var circles = node.SelectNodes(".//span[@class='f1']");
 		var triangles = node.SelectNodes(".//span[@class='f2']");
