@@ -27,8 +27,8 @@ using KT2CG;
 
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 KillTeamRepo repo = new KillTeamRepo();
-List<KillTeam> teams = repo.GetAll();
-//List<KillTeam> teams = repo.Get("Warpcoven");
+//List<KillTeam> teams = repo.GetAll();
+List<KillTeam> teams = repo.Get("Novitiate");
 var scraper = new Scraper(teams);
 scraper.Scrape();
 

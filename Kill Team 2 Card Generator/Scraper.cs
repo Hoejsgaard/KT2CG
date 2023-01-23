@@ -31,8 +31,31 @@ public class Scraper
 		var doc = web.Load(page);
 		ExtractEquipment(team, doc);
 		ExtractTacOps(team, doc);
+		ExtractPloys(team, doc, "Tactical Ploys", team.Ploys.TacticalPloys);
+		ExtractPloys(team, doc, "Strategic Ploys", team.Ploys.StrategicPloys);
 	}
 
+	private void ExtractPloys(KillTeam killTeam, HtmlDocument doc, string header, List<Ploy> ploys)
+	{
+
+		var cantBeBothered= doc.DocumentNode.SelectNodes(
+			$"//h2[text()='{header}']/following-sibling::div[@class='BreakInsideAvoid']");
+		var ployNodes = cantBeBothered[0]
+			.SelectNodes(".//div[@class='Columns2']/div[@class=' stratWrapper BreakInsideAvoid']");
+
+		foreach (var ployNode in ployNodes)
+		{
+			var ploy = new Ploy();
+
+			var elements = ployNode.SelectNodes(".//div");
+			ploy.Name = elements[0].SelectNodes(".//span")[0].InnerText;
+			ploy.Cost = elements[0].SelectNodes(".//span")[1].InnerText;
+			ReplaceDistanceShapes(elements[2]);
+			ploy.Description = elements[2].InnerText;
+
+			ploys.Add(ploy);
+		}
+	}
 
 	private void ExtractTacOps(KillTeam killTeam, HtmlDocument doc)
 	{
@@ -52,6 +75,7 @@ public class Scraper
 
 			tacOps.Name = elements[0].InnerText;
 			tacOps.Number = elements[1].InnerText;
+			tacOps.Number = tacOps.Number.Substring(tacOps.Number.Length - 1, 1);
 			var descriptionNode = elements[2];
 			var conditionsNode = descriptionNode.SelectSingleNode(".//ul");
 			var conditions = descriptionNode.SelectNodes(".//ul/li");
