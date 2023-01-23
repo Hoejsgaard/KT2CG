@@ -2,6 +2,8 @@
 
 using System.Text.Json;
 using KT2CG;
+using KT2CG.Render;
+using KT2CG.Scraping;
 
 //new KillTeam("Novitiate", "https://wahapedia.ru/kill-team2/kill-teams/novitiate/", Color.DarkRed),
 //	new KillTeam("Talons of the Emperor", "https://wahapedia.ru/kill-team2/kill-teams/talons-of-the-emperor/", Color.DarkOrange),
@@ -25,14 +27,16 @@ using KT2CG;
 //	new KillTeam("Pathfinder", "https://wahapedia.ru/kill-team2/kill-teams/pathfinder/", Color.LightGray),
 
 Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
+string dataPath = "c:\\tmp\\killTeamsData.json";
+string htmlPath = "c:\\tmp\\killTeamsCards";
 var repo = new KillTeamRepo();
-var teams = repo.GetAll();
-//List<KillTeam> teams = repo.Get("Novitiate");
+//var teams = repo.GetAll();
+List<KillTeam> teams = repo.Get("Novitiate");
 var scraper = new Scraper(teams);
 scraper.Scrape();
 
 var json = JsonSerializer.Serialize(teams);
-using (var writer = new StreamWriter("c:\\tmp\\eqipment.json"))
+using (var writer = new StreamWriter(dataPath))
 {
 	writer.Write(json);
 }
@@ -46,6 +50,9 @@ foreach (var killTeam in teams)
 	Console.WriteLine($"Fetched {killTeam.Ploys.TacticalPloys.Count} tactical ploys");
 	Console.WriteLine();
 }
+
+var htmlPrinter = new HtmlPrinter(dataPath, htmlPath);
+htmlPrinter.Print();
 
 Console.WriteLine("That was fun. Press any key to exit");
 Console.ReadKey();
