@@ -227,9 +227,10 @@ public class Scraper
                     var details = specialRule.SelectNodes("./span");
                     if (details == null) //e.g., farstalker kinband, Kroot pistol
                     {
-                        var rule = specialRule.ParentNode.InnerText;
+	                  var rule = specialRule.ParentNode.InnerText;
+                	    
 
-                        if (specialRule.HasClass("f1"))
+	                    if (specialRule.HasClass("f1"))
                             rule += "△";
                         if (specialRule.HasClass("f2"))
                             rule += "◯";

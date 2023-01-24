@@ -40,7 +40,11 @@ public class HtmlPrinter
 		<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01//EN""
 		  ""http://www.w3.org/TR/html4/strict.dtd"">
 		<HTML>
-		  <HEAD />
+		  <HEAD>
+		  <STYLE>
+			  {RenderStyles()}
+		  </STYLE>
+		  </HEAD>
 		  <BODY>
 			{RenderPages()}
 		  </BODY>
@@ -62,4 +66,15 @@ public class HtmlPrinter
   return "";
 	}
 
+	private string RenderStyles()
+	{
+		return @"
+			
+			 .grid {
+				  display: grid;
+				  grid-template-columns: repeat(4, 44mm);
+				  grid-template-rows: 63mm;
+			  }";
+	}
+	
 }
