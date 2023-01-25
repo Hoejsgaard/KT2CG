@@ -9,8 +9,8 @@ Console.WriteLine("HOLA! Let's get some eqipment data, shall we?");
 string dataPath = "c:\\tmp\\killTeamsData.json";
 string htmlPath = "c:\\tmp\\killTeamsCards";
 var repo = new KillTeamRepo();
-var teams = repo.GetAll();
-//List<KillTeam> teams = repo.Get("Novitiate");
+//var teams = repo.GetAll();
+var teams = repo.Get("Novitiate");
 var scraper = new Scraper(teams);
 scraper.Scrape();
 

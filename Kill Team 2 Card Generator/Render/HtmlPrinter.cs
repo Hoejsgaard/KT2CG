@@ -32,7 +32,7 @@ public class HtmlPrinter
 
 	public void Print()
 	{
-		StringBuilder stringBuilder = new StringBuilder();
+		var stringBuilder = new StringBuilder();
 
 		// do the HTML magic
 
@@ -50,31 +50,80 @@ public class HtmlPrinter
 		  </BODY>
 		</HTML>");
 
-		
-		Directory.CreateDirectory( _outputFolder );
+
+		Directory.CreateDirectory(_outputFolder);
 		File.WriteAllText(_outputFolder + "\\teams.html", stringBuilder.ToString());
 	}
 
 	private string RenderPages()
 	{
-  // foreach faction
-  // Render equipment in american mini size on A4
-  // - Only one of eqipment ending in \u002B
-  // - 5 of other eqipments OR based on input options.
-  // - Calculate how many cards there are. Figure out how many pages are needed. Render
-  // Render Tac Ops, Strategic Ploys and Tactical Ploys in Tarot sized cards on A4. There should be 4 on a A4 page.
-  return "";
+		// foreach faction
+		// Render equipment in american mini size on A4
+		// - Only one of eqipment ending in \u002B
+		// - 5 of other eqipments OR based on input options.
+		// - Calculate how many cards there are. Figure out how many pages are needed. Render
+		// Render Tac Ops, Strategic Ploys and Tactical Ploys in Tarot sized cards on A4. There should be 4 on a A4 page.
+		var testdata = @"<div class='page'>
+					  <div class='grid'>"
+			;
+
+		for (var i = 0; i < 16; i++)
+			testdata += @" <div class='equipment'>
+					   <div class='equipmentInside'>
+					     <div class='name'>Horse head</div>
+	          		     <div class='EP'>1</div>
+					     <div class='description'> Foo bar bas </div>
+	          	       </div>
+				   </div>
+	          ";
+
+		testdata += "</div>" +
+		            "</div>";
+
+		return testdata;
 	}
+
 
 	private string RenderStyles()
 	{
 		return @"
-			
+.page {
+			   size: 297mm 210mm;
+			   margin: 30mm 45mm 30mm 45mm;
+			 }
+
 			 .grid {
 				  display: grid;
-				  grid-template-columns: repeat(4, 44mm);
-				  grid-template-rows: 63mm;
-			  }";
+          grid-template-columns: repeat(4, 1fr);
+          grid-template-rows: repeat(4, 1fr);
+            
+				}
+			  
+			  .equipment {
+				  padding: 2px;
+				  color: #c54c21;
+				  height: 63mm;
+				  width: 44mm;
+          background: linear-gradient(-45deg, transparent 14px, #c54c21 0) 
+			  }
+        .equipmentInside {
+          display: block;
+          padding: 0px;
+          height: 63mm;
+          background: linear-gradient(-45deg, transparent 13px, #FFFFFF 0);
+        }
+			  .name {
+				  font-size: 120%;
+				  color: white;
+          background: #c54c21
+			  }
+			  .EP {
+				  color: black;
+			  }
+			  .description{
+          color: black;
+          linear-gradient(315deg, transparent 13px, #FFFFFF 0)
+			  }
+			  ";
 	}
-	
 }
