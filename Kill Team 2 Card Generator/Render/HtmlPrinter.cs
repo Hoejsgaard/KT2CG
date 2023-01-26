@@ -69,8 +69,10 @@ public class HtmlPrinter
 		for (var i = 0; i < 16; i++)
 			testdata += @" <div class='equipment'>
 					   <div class='equipmentInside'>
-					     <div class='name'>Horse head</div>
-	          		     <div class='EP'>1</div>
+					     <div class='equipment-header'>
+                            <div class='name'>Horse head</div>
+	          		        <div class='EP'>[1]</div>
+                        </div>
 					     <div class='description'> Foo bar bas </div>
 	          	       </div>
 				   </div>
@@ -115,13 +117,17 @@ public class HtmlPrinter
 			 height: 63mm;
 			 background: linear-gradient(-45deg, transparent 13px, #FFFFFF 0);
 		}
-		 .name {
+         .equipment-header {
+		     display: flex;
+		     justify-content: space-between;
+            background: #c54c21;
+            align-items: center;
+            padding: 5px 5px;
+		}
+		 .name, .EP {
 			 font-size: 120%;
 			 color: white;
-			 background: #c54c21 
-		}
-		 .EP {
-			 color: black;
+			 
 		}
 		 .description{
 			 color: black;
