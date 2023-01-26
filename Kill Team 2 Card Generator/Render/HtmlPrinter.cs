@@ -58,10 +58,9 @@ public class HtmlPrinter
 	private string RenderPages()
 	{
 		// foreach faction
-		// Render equipment in american mini size on A4
-		// - Only one of eqipment ending in \u002B
-		// - 5 of other eqipments OR based on input options.
-		// - Calculate how many cards there are. Figure out how many pages are needed. Render
+		// Render equipment in american mini size in chunks of A4 (my guess is 4x4 on a page)
+		// - Only one of equipment ending in \u002B
+		// - 5 of other equipments OR as many as you can wholly buy for 10 EP OR based on input options. If multiple EP, just assume 4.
 		// Render Tac Ops, Strategic Ploys and Tactical Ploys in Tarot sized cards on A4. There should be 4 on a A4 page.
 		var testdata = @"<div class='page'>
 					  <div class='grid'>"
@@ -87,43 +86,48 @@ public class HtmlPrinter
 	private string RenderStyles()
 	{
 		return @"
-.page {
-			   size: 297mm 210mm;
-			   margin: 30mm 45mm 30mm 45mm;
-			 }
+		 .page {
+			 width: 21cm;
+			 height: 29.7cm;
+			 display: block;
+			 margin: 0.5cm 0.5cm 0.5cm 0.5cm;
+			 box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+			 padding: 1cm 1cm 1cm 1cm;
+		}
+		 .grid {
+			 display: grid;
+			 grid-template-columns: repeat(4, 44mm);
+			 grid-template-rows: repeat(4, 63mm);
+			 gap: 0 0;
+			 grid-auto-flow: column;
+			 grid-auto-columns: 44mm;
+		}
+		 .equipment {
+			 padding: 2px;
+			 color: #c54c21;
+			 height: 63mm;
+			 width: 44mm;
+			 background: linear-gradient(-45deg, transparent 14px, #c54c21 0) 
+		}
+		 .equipmentInside {
+			 display: block;
+			 padding: 0px;
+			 height: 63mm;
+			 background: linear-gradient(-45deg, transparent 13px, #FFFFFF 0);
+		}
+		 .name {
+			 font-size: 120%;
+			 color: white;
+			 background: #c54c21 
+		}
+		 .EP {
+			 color: black;
+		}
+		 .description{
+			 color: black;
+			 background:linear-gradient(315deg, transparent 13px, #FFFFFF 0) 
+		}
 
-			 .grid {
-				  display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: repeat(4, 1fr);
-            
-				}
-			  
-			  .equipment {
-				  padding: 2px;
-				  color: #c54c21;
-				  height: 63mm;
-				  width: 44mm;
-          background: linear-gradient(-45deg, transparent 14px, #c54c21 0) 
-			  }
-        .equipmentInside {
-          display: block;
-          padding: 0px;
-          height: 63mm;
-          background: linear-gradient(-45deg, transparent 13px, #FFFFFF 0);
-        }
-			  .name {
-				  font-size: 120%;
-				  color: white;
-          background: #c54c21
-			  }
-			  .EP {
-				  color: black;
-			  }
-			  .description{
-          color: black;
-          linear-gradient(315deg, transparent 13px, #FFFFFF 0)
-			  }
 			  ";
 	}
 }
