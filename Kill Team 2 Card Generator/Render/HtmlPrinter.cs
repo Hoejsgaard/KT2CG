@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using KT2CG.Scraping;
 
@@ -87,8 +87,10 @@ public class HtmlPrinter
 	{
 		return @"
 		 .page {
-			 width: 21cm;
-			 height: 29.7cm;
+			 min-width: 21cm;
+			 min-height: 29.7cm;
+             max-width: 21cm;
+			 max-height: 29.7cm;
 			 display: block;
 			 margin: 0.5cm 0.5cm 0.5cm 0.5cm;
 			 box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
@@ -96,11 +98,9 @@ public class HtmlPrinter
 		}
 		 .grid {
 			 display: grid;
-			 grid-template-columns: repeat(4, 44mm);
-			 grid-template-rows: repeat(4, 63mm);
+			 grid-template-columns: repeat(auto-fit, 44mm);
+			 grid-template-rows: repeat(auto-fit, 63mm);
 			 gap: 0 0;
-			 grid-auto-flow: column;
-			 grid-auto-columns: 44mm;
 		}
 		 .equipment {
 			 padding: 2px;
