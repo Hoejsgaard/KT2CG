@@ -131,6 +131,7 @@ public class HtmlPrinter
 		}
 		 .description{
 			 color: black;
+            padding: 5px 5px;
 			 background:linear-gradient(315deg, transparent 13px, #FFFFFF 0) 
 		}
 
