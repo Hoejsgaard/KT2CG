@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using KT2CG.Scraping;
 
@@ -69,8 +69,10 @@ public class HtmlPrinter
 		for (var i = 0; i < 16; i++)
 			testdata += @" <div class='equipment'>
 					   <div class='equipmentInside'>
-					     <div class='name'>Horse head</div>
-	          		     <div class='EP'>1</div>
+					     <div class='equipment-header'>
+                            <div class='name'>Horse head</div>
+	          		        <div class='EP'>[1]</div>
+                        </div>
 					     <div class='description'> Foo bar bas </div>
 	          	       </div>
 				   </div>
@@ -87,8 +89,10 @@ public class HtmlPrinter
 	{
 		return @"
 		 .page {
-			 width: 21cm;
-			 height: 29.7cm;
+			 min-width: 21cm;
+			 min-height: 29.7cm;
+             max-width: 21cm;
+			 max-height: 29.7cm;
 			 display: block;
 			 margin: 0.5cm 0.5cm 0.5cm 0.5cm;
 			 box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
@@ -96,11 +100,9 @@ public class HtmlPrinter
 		}
 		 .grid {
 			 display: grid;
-			 grid-template-columns: repeat(4, 44mm);
-			 grid-template-rows: repeat(4, 63mm);
+			 grid-template-columns: repeat(auto-fit, 44mm);
+			 grid-template-rows: repeat(auto-fit, 63mm);
 			 gap: 0 0;
-			 grid-auto-flow: column;
-			 grid-auto-columns: 44mm;
 		}
 		 .equipment {
 			 padding: 2px;
@@ -115,16 +117,21 @@ public class HtmlPrinter
 			 height: 63mm;
 			 background: linear-gradient(-45deg, transparent 13px, #FFFFFF 0);
 		}
-		 .name {
+         .equipment-header {
+		     display: flex;
+		     justify-content: space-between;
+            background: #c54c21;
+            align-items: center;
+            padding: 5px 5px;
+		}
+		 .name, .EP {
 			 font-size: 120%;
 			 color: white;
-			 background: #c54c21 
-		}
-		 .EP {
-			 color: black;
+			 
 		}
 		 .description{
 			 color: black;
+            padding: 5px 5px;
 			 background:linear-gradient(315deg, transparent 13px, #FFFFFF 0) 
 		}
 
