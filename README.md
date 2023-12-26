@@ -1,3 +1,9 @@
+# Discontinued
+
+Phil Gunner started [Phil Team](https://ko-fi.com/phil_g) roughly the same time I started this project, and he got there first, hence I dropped the project. 
+
+I recoomend you check out phil's project, since he's got a nice gig going there! I just wanted some nice printout cards for playing Kill Team, and now I have (his) cards :)
+
 # KT2CG - Kill Team 2 card generator
 
 For rosters and data cards we have [BattleScribe](https://battlescribe.net/) and [Datacard App](https://datacard.app/). For me they do the job very well. 
